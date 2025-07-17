@@ -1,32 +1,26 @@
 import streamlit as st
 import pickle
-import time
+import requests
 
 st.set_page_config(layout="wide")
-st.title("📊 Nifty Option Live Bid-Ask Tracker (Top 20)")
+st.title("📊 NiftyAskBid - Live Bid/Ask Tracker")
 
-while True:
-    try:
-        with open("live_data.pkl", "rb") as f:
-            data = pickle.load(f)
+url = "https://firebasestorage.googleapis.com/v0/b/YOUR_BUCKET_NAME/o/live_data.pkl?alt=media"
 
-        for symbol in data.keys():
-            st.header(f"🔹 {symbol}")
+response = requests.get(url)
+data = pickle.loads(response.content)
 
-            col1, col2 = st.columns(2)
+for symbol in data.keys():
+    st.header(f"🔹 {symbol}")
 
-            with col1:
-                st.subheader("Top 20 Bid Qty")
-                st.table(data[symbol]['bid'])
+    col1, col2 = st.columns(2)
 
-            with col2:
-                st.subheader("Top 20 Ask Qty")
-                st.table(data[symbol]['ask'])
+    with col1:
+        st.subheader("Top 20 Bid Qty")
+        st.table(data[symbol]['bid'])
 
-            st.markdown(f"LTP: {data[symbol]['ltp']}")
+    with col2:
+        st.subheader("Top 20 Ask Qty")
+        st.table(data[symbol]['ask'])
 
-        time.sleep(1)
-        st.experimental_rerun()
-    except Exception as e:
-        st.error(f"Error: {e}")
-        time.sleep(2)
+    st.markdown(f"LTP: {data[symbol]['ltp']}")
