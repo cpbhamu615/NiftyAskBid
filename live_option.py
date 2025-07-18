@@ -5,7 +5,7 @@ import requests
 st.set_page_config(layout="wide")
 st.title("📊 NiftyAskBid - Live Bid/Ask Tracker")
 
-url = "https://firebasestorage.googleapis.com/v0/b/YOUR_BUCKET_NAME/o/live_data.pkl?alt=media"
+url = "https://firebasestorage.googleapis.com/v0/b/niftyaskbid-XXXX.appspot.com/o/live_data.pkl?alt=media"
 
 response = requests.get(url)
 data = pickle.loads(response.content)
